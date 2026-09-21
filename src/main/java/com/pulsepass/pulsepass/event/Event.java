@@ -16,6 +16,14 @@ import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+import com.pulsepass.pulsepass.artist.Artist;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "events")
 public class Event {
@@ -51,6 +59,13 @@ public class Event {
     @JoinColumn(name = "venue_id", nullable = false)
     private Venue venue;
 
+    @ManyToMany
+    @JoinTable(
+            name = "event_artists",
+            joinColumns = @JoinColumn(name = "event_id"),
+            inverseJoinColumns = @JoinColumn(name = "artist_id"))
+    private Set<Artist> artists = new HashSet<>();
+
     /** Constructor requerido por JPA; no debe usarse directamente. */
     protected Event() {
     }
@@ -77,6 +92,18 @@ public class Event {
     public LocalDateTime getEventDate() { return eventDate; }
     public int getMinimumAge() { return minimumAge; }
     public Venue getVenue() { return venue; }
+
+        public Set<Artist> getArtists() {
+        return Collections.unmodifiableSet(artists);
+    }
+
+    public void addArtist(Artist artist) {
+        artists.add(artist);
+    }
+
+    public void removeArtist(Artist artist) {
+        artists.remove(artist);
+    }
 
     @Override
     public boolean equals(Object o) {
