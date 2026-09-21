@@ -59,6 +59,9 @@ public class Event {
     @JoinColumn(name = "venue_id", nullable = false)
     private Venue venue;
 
+    @Column(name = "streaming_url", length = 500)
+    private String streamingUrl;
+    
     @ManyToMany
     @JoinTable(
             name = "event_artists",
@@ -95,6 +98,12 @@ public class Event {
 
         public Set<Artist> getArtists() {
         return Collections.unmodifiableSet(artists);
+
+    public String getStreamingUrl() { return streamingUrl; }
+
+    public void changeStreamingUrl(String streamingUrl) {
+        this.streamingUrl = streamingUrl;
+    }
     }
 
     public void addArtist(Artist artist) {
